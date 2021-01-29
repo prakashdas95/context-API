@@ -1,13 +1,19 @@
-import React from 'react';
-import { connect } from 'react-redux';
+import React, { useContext } from 'react';
 
 import CollectionItem from '../../components/collection-item/collection-item.component';
 
-import { selectCollection } from '../../redux/shop/shop.selectors';
+import CollectionsContext from '../../contexts/collections/collections.contexts';
 
 import './collection.styles.scss';
 
-const CollectionPage = ({ collection }) => {
+
+//******************************** */
+// useContext -WAY 1
+//******************************** */
+
+const CollectionPage = ({ match }) => {
+  const collections = useContext(CollectionsContext);
+  const collection = collections[match.params.collectionId];
   const { title, items } = collection;
   return (
     <div className='collection-page'>
@@ -21,8 +27,43 @@ const CollectionPage = ({ collection }) => {
   );
 };
 
-const mapStateToProps = (state, ownProps) => ({
-  collection: selectCollection(ownProps.match.params.collectionId)(state)
-});
+export default CollectionPage;
 
-export default connect(mapStateToProps)(CollectionPage);
+
+
+
+//******************************** */
+// Context API - WAY 2
+//******************************** */
+
+// import CollectionsContext from '../../contexts/collections/collections.contexts';
+
+// import './collection.styles.scss';
+
+// const CollectionPage = ({ match }) => {
+
+//   return (
+//     <CollectionsContext.Consumer>
+//       {
+//         collections => {
+//           const collection = collections[match.params.collectionId];
+//           const { title, items } = collection;
+//           return (
+//             < div className='collection-page' >
+//               <h2 className='title'>{title}</h2>
+//               <div className='items'>
+//                 {items.map(item => (
+//                   <CollectionItem key={item.id} item={item} />
+//                 ))}
+//               </div>
+//             </div>
+//           )
+//         }
+
+//       }
+//     </CollectionsContext.Consumer >
+//   );
+// };
+
+
+// export default CollectionPage;
